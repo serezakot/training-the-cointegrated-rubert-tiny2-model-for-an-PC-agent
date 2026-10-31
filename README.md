@@ -1,4 +1,4 @@
-# Voice Command Router
+# training the cointegrated rubert tiny2
 
 A tiny, fast, locally-run **first-layer intent parser** for a Russian-language voice/PC assistant.
 

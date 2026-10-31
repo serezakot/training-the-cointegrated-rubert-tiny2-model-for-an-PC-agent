@@ -1,0 +1,6 @@
+# Core (a CPU is enough for this model; see README for the CPU-only torch wheel)
+torch>=2.1
+transformers>=4.40      # the author trained with transformers 5.x
+
+# Tests (part 1 of the test suite does not need torch at all)
+pytest>=7.0

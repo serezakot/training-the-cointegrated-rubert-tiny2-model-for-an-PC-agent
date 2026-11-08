@@ -6,8 +6,10 @@
 
 In code:
     result = await ml_infer.parse("переведи мне на английский как дела")
-    result["route"]   # "browser" | "translate" | "llm"
-    # browser:   result["site"], result["query"]   (no site -> Google search, no query -> just open the site)
+    result["route"]   # "browser" | "app" | "system" | "translate" | "llm"
+    # browser:   result["site"], result["query"]   (no site -> Google/web search, no query -> just open the site)
+    # app:       result["site"], result["query"]   (desktop/hybrid app or local folder/file + optional inner query)
+    # system:    result["query"]                   (PC/OS command span)
     # translate: result["text"], result["lang"]    ("none" - no target language was named)
     # llm:       the whole phrase goes to the big LLM (result["fallback"] == True if the model was unsure)
 
@@ -61,8 +63,10 @@ async def parse(text: str, model_dir: str = MODEL_DIR) -> dict:
 
 def show(result: dict, seconds: float) -> None:
     print(f"  route : {result['route']}" + (f"   (-> LLM: {result['reason']})" if result["fallback"] else ""))
-    if result["route"] == "browser":
+    if result["route"] in ("browser", "app"):
         print(f"  site  : {result['site']!r}\n  query : {result['query']!r}")
+    elif result["route"] == "system":
+        print(f"  query : {result['query']!r}")
     elif result["route"] == "translate":
         print(f"  text  : {result['text']!r}\n  lang  : {result['lang']}")
     print(f"  confidence {result['confidence']:.2f}, {seconds * 1000:.0f} ms")

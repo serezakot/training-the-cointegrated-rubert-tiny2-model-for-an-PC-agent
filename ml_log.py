@@ -78,8 +78,8 @@ def to_tsv(rows, only_doubtful=True) -> list:
         seen.add(k)
         route = r.get("route", "llm")
         lang = r.get("lang", "none") if route == "translate" else "none"
-        site = r.get("site", "") if route == "browser" else ""
-        query = r.get("query", "") if route == "browser" else ""
+        site = r.get("site", "") if route in ("browser", "app") else ""
+        query = r.get("query", "") if route in ("browser", "app", "system") else ""
         text = r.get("text", "") if route == "translate" else ""
         line = "\t".join([phrase, route, site, query, text, lang or "none"])
         unsure = bool(r.get("fallback")) or float(r.get("confidence") or 0) < DOUBT

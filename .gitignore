@@ -1,25 +1,14 @@
-# Python / tooling
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
 .venv/
 venv/
-__pycache__/
-*.pyc
-.pytest_cache/
+
+# IDE
 .idea/
-.vscode/
+
+# OS
 .DS_Store
-
-# Generated training data (recreate with: python3 ml_gen.py ...)
-data/
-
-# Model weights (recreate with: python3 ml_train.py ...)
-ml_model/
-ml_model_*/
-*.safetensors
-heads.pt
-
-# Private: what you actually said to the assistant
-parse_log.jsonl
-ml_review.tsv
-
-# Archives
-*.zip
+/ml_model/

@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 from transformers import AutoModel, AutoTokenizer
 
-from ml_spec import INTENTS, LANGS, MAX_LEN, TAGS
+from ml_spec import INTENTS, LANGS, MAX_LEN, TAGS, _QUOTES
 
 
 class Parser(nn.Module):
@@ -26,8 +26,12 @@ class Parser(nn.Module):
 
 
 def tokenize(tok, batch_words):
-    """List of word lists -> tensors (+ the encoding itself, so we know which word each sub-token belongs to)."""
-    return tok(batch_words, is_split_into_words=True, truncation=True, max_length=MAX_LEN,
+    """List of word lists -> tensors (+ the encoding itself, so we know which word each sub-token belongs to).
+
+    Слова подаются модели в нижнем регистре и без кавычек («...», "..."): токенизатор регистрозависим, а кавычки иначе
+    сдвигают first_tokens() на символ « вместо самого слова. Ответ собирается из ИСХОДНЫХ слов."""
+    low = [[(w.translate(_QUOTES).lower().replace("ё", "е") or w.lower()) for w in words] for words in batch_words]
+    return tok(low, is_split_into_words=True, truncation=True, max_length=MAX_LEN,
                padding=True, return_tensors="pt")
 
 
